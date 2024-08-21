@@ -22,3 +22,22 @@ Our study aims to overcome the challenges posed by low-quality images, such as b
 - `random_placement_2.ipynb`: A supporting notebook that deals with the synthetic data generation and random placement of bats in images.
 - `The Enhancement and Automated Counting of Bats.pdf`: The project report that details the methodology, results, and discussion of the study.
 
+## Results
+
+The model demonstrates a significant improvement in bat detection and counting accuracy, achieving an overall accuracy of 93% with the ensemble model. It was particularly effective in counting smaller groups of bats but faced challenges with larger and more complex groups. The synthetic dataset and CNN architecture proved to be robust tools for this task.
+
+## Future Work
+
+Future research could focus on enhancing the dataset with more diverse scenarios and different bat species. Additionally, incorporating Region-based CNN (R-CNN) could improve the model’s spatial detection capabilities, further refining bat counting accuracy.
+
+## Contributors
+
+- **Zhi Zheng** - Data Science, Florida Polytechnic University
+- **Benjamin Bowman** - Computer Science, Florida Polytechnic University
+- **Nesreen Dalhy** - Computer Science, Florida Polytechnic University
+- **Brendan Geary** - Computer Science, Florida Polytechnic University
+- **Bayazit Karaman** - Computer Science, Florida Polytechnic University
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
