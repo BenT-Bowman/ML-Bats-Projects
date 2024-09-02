@@ -37,6 +37,7 @@ Future research could focus on enhancing the dataset with more diverse scenarios
 - **Nesreen Dalhy** - Computer Science, Florida Polytechnic University
 - **Brendan Geary** - Computer Science, Florida Polytechnic University
 - **Bayazit Karaman** - Computer Science, Florida Polytechnic University
+- **Ian Bentley** - Physics, Florida Polytechnic University
 
 ## License
 
