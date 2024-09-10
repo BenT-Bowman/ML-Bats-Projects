@@ -143,7 +143,8 @@ if __name__ == "__main__":
     data_path, output_folder, num_samples_to_generate = argparse_helper()
     print(data_path, output_folder, num_samples_to_generate)
     for i in range(2, 13):
-        os.mkdir(f'{output_folder}/{i}')
+        if not os.path.exists(f"{output_folder}/{i}"):
+            os.mkdir(f'{output_folder}/{i}')
 
     for number_of_bats in range(2, 13):
         for i in tqdm(range(0, num_samples_to_generate)):
