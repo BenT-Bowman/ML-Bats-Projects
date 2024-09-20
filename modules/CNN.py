@@ -20,7 +20,7 @@ class CNN(nn.Module):
             nn.Linear(512, output_size)
         )
     def forward(self, x):
-        return self.model(x)
+        return F.softmax(self.model(x))
 
 # class MoE(nn.Module):
 #     def __init__(self, output_size, list_len=3):
