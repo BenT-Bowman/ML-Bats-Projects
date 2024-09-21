@@ -201,7 +201,3 @@ You can modify paths, batch sizes, learning rates, and the number of epochs in t
 ## Contact
 
 For any questions or issues, please feel free to contact the project maintainer.
-
----
-
-This `README.md` now includes the details from "The Enhancement and Automated Counting of Bats" project and the PyTorch-based image classification process. Let me know if you need any further updates!
