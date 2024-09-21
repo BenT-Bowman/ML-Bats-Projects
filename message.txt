@@ -1,0 +1,100 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# Model 1: Simple CNN
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.fc1 = nn.Linear(32 * 8 * 8, 128)
+        self.fc2 = nn.Linear(128, 10)  # Assuming 10 classes
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Model 2: Deeper CNN
+class DeepCNN(nn.Module):
+    def __init__(self):
+        super(DeepCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 32, 3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, 3, padding=1)
+        self.fc1 = nn.Linear(128 * 4 * 4, 256)
+        self.fc2 = nn.Linear(256, 10)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv3(x)), 2)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Model 3: Even Deeper CNN (ResNet-like)
+class ComplexCNN(nn.Module):
+    def __init__(self):
+        super(ComplexCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, 3, padding=1)
+        self.conv2 = nn.Conv2d(64, 128, 3, padding=1)
+        self.conv3 = nn.Conv2d(128, 256, 3, padding=1)
+        self.conv4 = nn.Conv2d(256, 512, 3, padding=1)
+        self.fc1 = nn.Linear(512 * 2 * 2, 512)
+        self.fc2 = nn.Linear(512, 10)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv3(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv4(x)), 2)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Complexity Decision Model
+class ComplexityDecisionModel:
+    def __init__(self, model1, model2, model3):
+        self.model1 = model1
+        self.model2 = model2
+        self.model3 = model3
+
+    def decide_model(self, image):
+        # Heuristic to decide which model to use (you can make this more advanced)
+        # For example, we use the variance of pixel values as a proxy for complexity
+        image_var = torch.var(image).item()
+        
+        # Dummy threshold values for selecting models
+        if image_var < 0.1:
+            return self.model1  # Low complexity
+        elif 0.1 <= image_var < 0.2:
+            return self.model2  # Medium complexity
+        else:
+            return self.model3  # High complexity
+
+    def forward(self, image):
+        # Choose model based on image complexity
+        chosen_model = self.decide_model(image)
+        return chosen_model(image)
+
+# Instantiate the models
+model1 = SimpleCNN()
+model2 = DeepCNN()
+model3 = ComplexCNN()
+
+# Instantiate the top model
+complexity_model = ComplexityDecisionModel(model1, model2, model3)
+
+# Example forward pass with an image
+# Assume we have a batch of images in 'images' with shape (batch_size, 3, 32, 32)
+images = torch.randn(4, 3, 32, 32)  # Dummy batch of 4 images
+output = complexity_model.forward(images[0:1])  # Forward pass with the first image
+print(output)
