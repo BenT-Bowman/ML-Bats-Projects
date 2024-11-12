@@ -4,6 +4,7 @@ import os
 import cv2
 import argparse
 from tqdm import tqdm
+import math
 
 def argparse_helper():
     parser = argparse.ArgumentParser(description='Process some files.')
@@ -18,52 +19,44 @@ def argparse_helper():
     return data_path, save_location, args.num_2_gen
 
 
-def random_point(n)->tuple:
-    return np.random.randint(0, n + 1), np.random.randint(0, n + 1)
+def random_point(min_distance, img_size=40):
+    """Generate a random point with coordinates in the positive range."""
+    return (random.uniform(4, img_size - min_distance), 
+            random.uniform(min_distance, img_size))
 
-def too_close(point: tuple, lst: list, thresh: float)->bool:
-    """
-    Returns True if distance is under thresh, False if it's further
-    """
-    for other in lst:
-        distance = np.linalg.norm(np.array(point) - np.array(other))
-        if distance <= thresh:
+def too_close(new_point, points_list, min_dist):
+    """Check if the new point is too close to any point in points_list."""
+    for p in points_list:
+        distance = math.hypot(new_point[0] - p[0], new_point[1] - p[1])
+        if distance < min_dist:
             return True
     return False
 
-def bat_coords(n, thresh, img_size=40):
+def bat_coords(n, img_size=40):
     points_list = []
-    
-    if thresh < 3:
-        scaling_value = 0.3
-        smallest_point = 20
-    elif thresh < 6:
-        scaling_value = 0.2
-        smallest_point = 25
-    elif thresh < 8:
-        scaling_value = 0.3
-        smallest_point=30
-    elif thresh < 11:
-        scaling_value = 0.2
-        smallest_point =30
-    else:
-        smallest_point = 35
-        scaling_value = 0.1
 
-    width = img_size * scaling_value
+    # Calculate adaptive minimum distance and scaling based on the number of bats and image size
+    base_spacing_factor = 0.25  # Base factor to adjust spacing, adaptable across image sizes
+    scaling_value = base_spacing_factor * (img_size / 100) * math.sqrt(n)
+    width = img_size * scaling_value  # Adaptive width based on scaling and image size
+    print(width)
+
+    # Attempt to place n points with the adaptive spacing
     while True:
         attempt_count = 0
         points_list = []
         for _ in range(50):
-            p1 = random_point(smallest_point)
+            p1 = random_point(width)
             if attempt_count > 5:
                 break
             if too_close(p1, points_list, width):
-                attempt_count+=1
+                attempt_count += 1
                 continue
             points_list.append(p1)
-            if len(points_list)==n:
+            if len(points_list) == n:
                 return points_list
+
+
 def mask_with_Kmeans(image, reverse=False):
     """
     If the bat is darker than the background 
